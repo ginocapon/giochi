@@ -18,6 +18,19 @@ from scrapers.ai_classifier import enrich_bando
 from scrapers.keyword_search import cerca_bandi_keyword, get_keyword_stats
 from scrapers.rss_ufficiali import scrape_rss_ufficiali
 
+# Import nuovi batch di bandi
+try:
+    from scrapers.bandi_nuovi_batch1 import get_bandi_batch1
+    BATCH1_AVAILABLE = True
+except ImportError:
+    BATCH1_AVAILABLE = False
+
+try:
+    from scrapers.bandi_nuovi_batch2 import get_bandi_batch2
+    BATCH2_AVAILABLE = True
+except ImportError:
+    BATCH2_AVAILABLE = False
+
 SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
 HF_TOKEN = os.environ.get('HF_TOKEN', '')
@@ -61,10 +74,10 @@ def save_to_supabase(bandi: List[Dict]) -> Dict:
             
             record = {
                 'titolo': bando.get('titolo', '')[:500],
-                'ente': bando.get('ente', 'N/A'),
+                'ente': bando.get('ente', bando.get('fonte', 'N/A')),
                 'tipo_ente': bando.get('tipo_ente', 'altro'),
                 'regione': bando.get('regione', 'Nazionale'),
-                'tipo_contributo': bando.get('tipo_contributo', 'misto'),
+                'tipo_contributo': bando.get('tipo_contributo', bando.get('tipo', 'misto')),
                 'stato': bando.get('stato', 'aperto'),
                 'contributo_max': str(bando.get('contributo_max', 'Vedi bando')),
                 'percentuale': str(bando.get('percentuale', 'Vedi bando')),
@@ -86,6 +99,41 @@ def save_to_supabase(bandi: List[Dict]) -> Dict:
     return {'inserted': inserted, 'errors': errors}
 
 
+def load_bandi_batch():
+    """Carica i bandi dai nuovi batch"""
+    bandi = []
+    
+    if BATCH1_AVAILABLE:
+        try:
+            batch1 = get_bandi_batch1()
+            # Converti formato per compatibilità
+            for b in batch1:
+                b['ente'] = b.get('fonte', 'N/A')
+                b['tipo_contributo'] = b.get('tipo', 'misto')
+            bandi.extend(batch1)
+            print(f"   ✓ Batch 1: {len(batch1)} bandi")
+        except Exception as e:
+            print(f"   ⚠ Errore Batch 1: {e}")
+    else:
+        print("   ⚠ Batch 1 non disponibile")
+    
+    if BATCH2_AVAILABLE:
+        try:
+            batch2 = get_bandi_batch2()
+            # Converti formato per compatibilità
+            for b in batch2:
+                b['ente'] = b.get('fonte', 'N/A')
+                b['tipo_contributo'] = b.get('tipo', 'misto')
+            bandi.extend(batch2)
+            print(f"   ✓ Batch 2: {len(batch2)} bandi")
+        except Exception as e:
+            print(f"   ⚠ Errore Batch 2: {e}")
+    else:
+        print("   ⚠ Batch 2 non disponibile")
+    
+    return bandi
+
+
 def run_all_scrapers():
     print("=" * 60)
     print("🇮🇹 BANDI ITALIA - SISTEMA COMPLETO")
@@ -102,7 +150,7 @@ def run_all_scrapers():
     stats = {}
     
     # 1. BANDI STATICI (300+)
-    print("\n📌 [1/5] BANDI DATABASE STATICO")
+    print("\n📌 [1/6] BANDI DATABASE STATICO")
     try:
         bandi = scrape_bandi_statici()
         all_bandi.extend(bandi)
@@ -111,8 +159,18 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['Statici'] = 0
     
-    # 2. RSS FEEDS GENERICI
-    print("\n📌 [2/5] RSS FEEDS")
+    # 2. NUOVI BATCH (300+)
+    print("\n📌 [2/6] NUOVI BATCH BANDI")
+    try:
+        bandi = load_bandi_batch()
+        all_bandi.extend(bandi)
+        stats['NuoviBatch'] = len(bandi)
+    except Exception as e:
+        print(f"   ❌ Errore: {e}")
+        stats['NuoviBatch'] = 0
+    
+    # 3. RSS FEEDS GENERICI
+    print("\n📌 [3/6] RSS FEEDS")
     try:
         bandi = scrape_rss_feeds()
         all_bandi.extend(bandi)
@@ -121,8 +179,8 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['RSS'] = 0
     
-    # 3. RSS BUR UFFICIALI (NUOVO!)
-    print("\n📌 [3/5] RSS BUR REGIONALI E PORTALI")
+    # 4. RSS BUR UFFICIALI
+    print("\n📌 [4/6] RSS BUR REGIONALI E PORTALI")
     try:
         bandi = scrape_rss_ufficiali()
         all_bandi.extend(bandi)
@@ -131,8 +189,8 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['RSS_BUR'] = 0
     
-    # 4. OPEN DATA
-    print("\n📌 [4/5] OPEN DATA PORTALS")
+    # 5. OPEN DATA
+    print("\n📌 [5/6] OPEN DATA PORTALS")
     try:
         bandi = scrape_opendata()
         all_bandi.extend(bandi)
@@ -141,8 +199,8 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['OpenData'] = 0
     
-    # 5. KEYWORD SEARCH
-    print("\n📌 [5/5] 🔍 KEYWORD SEARCH")
+    # 6. KEYWORD SEARCH
+    print("\n📌 [6/6] 🔍 KEYWORD SEARCH")
     try:
         bandi = cerca_bandi_keyword()
         all_bandi.extend(bandi)
@@ -179,12 +237,3 @@ def run_all_scrapers():
 
 if __name__ == '__main__':
     run_all_scrapers()
-
-from scrapers.bandi_nuovi_batch1 import get_bandi_batch1
-from scrapers.bandi_nuovi_batch2 import get_bandi_batch2
-
-# Nel workflow principale:
-bandi_batch1 = get_bandi_batch1()
-bandi_batch2 = get_bandi_batch2()
-tutti_bandi.extend(bandi_batch1)
-tutti_bandi.extend(bandi_batch2)
