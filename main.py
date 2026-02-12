@@ -179,3 +179,12 @@ def run_all_scrapers():
 
 if __name__ == '__main__':
     run_all_scrapers()
+
+from scrapers.bandi_nuovi_batch1 import get_bandi_batch1
+from scrapers.bandi_nuovi_batch2 import get_bandi_batch2
+
+# Nel workflow principale:
+bandi_batch1 = get_bandi_batch1()
+bandi_batch2 = get_bandi_batch2()
+tutti_bandi.extend(bandi_batch1)
+tutti_bandi.extend(bandi_batch2)
