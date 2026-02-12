@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-===== BANDI ITALIA - API FIRST SYSTEM =====
+===== BANDI ITALIA - API FIRST + AI SYSTEM =====
+Sistema intelligente con classificazione AI.
 """
 
 import os
-import sys
 from datetime import datetime
 from typing import List, Dict
 import hashlib
@@ -14,9 +14,11 @@ from supabase import create_client, Client
 from scrapers.bandi_statici import scrape_bandi_statici
 from scrapers.api_rss import scrape_rss_feeds
 from scrapers.api_opendata import scrape_opendata
+from scrapers.ai_classifier import enrich_bando, is_bando
 
 SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+HF_TOKEN = os.environ.get('HF_TOKEN', '')
 
 
 def get_supabase() -> Client:
@@ -52,6 +54,10 @@ def save_to_supabase(bandi: List[Dict]) -> Dict:
     
     for bando in bandi:
         try:
+            # Arricchisci con AI se disponibile
+            if HF_TOKEN:
+                bando = enrich_bando(bando)
+            
             record = {
                 'titolo': bando.get('titolo', '')[:500],
                 'ente': bando.get('ente', 'N/A'),
@@ -82,8 +88,12 @@ def save_to_supabase(bandi: List[Dict]) -> Dict:
 
 def run_all_scrapers():
     print("=" * 60)
-    print("🇮🇹 BANDI ITALIA - API FIRST SYSTEM")
+    print("🇮🇹 BANDI ITALIA - API FIRST + AI SYSTEM")
     print(f"📅 {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    if HF_TOKEN:
+        print("🧠 AI Classification: ATTIVA")
+    else:
+        print("🧠 AI Classification: Non configurata")
     print("=" * 60)
     
     all_bandi = []
@@ -121,7 +131,7 @@ def run_all_scrapers():
     unique_bandi = deduplicate_bandi(all_bandi)
     print(f"   Rimossi {len(all_bandi) - len(unique_bandi)} duplicati")
     
-    print("\n💾 SALVATAGGIO SU SUPABASE...")
+    print("\n💾 SALVATAGGIO SU SUPABASE (con AI enrichment)...")
     result = save_to_supabase(unique_bandi)
     
     print("\n" + "=" * 60)
