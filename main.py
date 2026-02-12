@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-===== BANDI ITALIA - AI + KEYWORD SEARCH =====
-Sistema intelligente con ricerca automatica per keyword.
+===== BANDI ITALIA - API + KEYWORD SEARCH + RSS =====
+Sistema intelligente con ricerca automatica.
 """
 
 import os
@@ -16,6 +16,7 @@ from scrapers.api_rss import scrape_rss_feeds
 from scrapers.api_opendata import scrape_opendata
 from scrapers.ai_classifier import enrich_bando
 from scrapers.keyword_search import cerca_bandi_keyword, get_keyword_stats
+from scrapers.rss_ufficiali import scrape_rss_ufficiali
 
 SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
@@ -87,12 +88,11 @@ def save_to_supabase(bandi: List[Dict]) -> Dict:
 
 def run_all_scrapers():
     print("=" * 60)
-    print("🇮🇹 BANDI ITALIA - AI + KEYWORD SEARCH")
+    print("🇮🇹 BANDI ITALIA - SISTEMA COMPLETO")
     print(f"📅 {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     
-    # Mostra statistiche keyword
     stats_kw = get_keyword_stats()
-    print(f"🔑 Keyword: {stats_kw['regioni']} regioni, {stats_kw['settori']} settori, {stats_kw['beneficiari']} beneficiari")
+    print(f"🔑 Keyword: {stats_kw['regioni']} regioni, {stats_kw['settori']} settori")
     
     if HF_TOKEN:
         print("🧠 AI Enrichment: ATTIVO")
@@ -101,18 +101,18 @@ def run_all_scrapers():
     all_bandi = []
     stats = {}
     
-    # 1. BANDI STATICI
-    print("\n📌 [1/4] BANDI NAZIONALI GARANTITI")
+    # 1. BANDI STATICI (300+)
+    print("\n📌 [1/5] BANDI DATABASE STATICO")
     try:
         bandi = scrape_bandi_statici()
         all_bandi.extend(bandi)
-        stats['Nazionali'] = len(bandi)
+        stats['Statici'] = len(bandi)
     except Exception as e:
         print(f"   ❌ Errore: {e}")
-        stats['Nazionali'] = 0
+        stats['Statici'] = 0
     
-    # 2. RSS FEEDS
-    print("\n📌 [2/4] RSS FEEDS UFFICIALI")
+    # 2. RSS FEEDS GENERICI
+    print("\n📌 [2/5] RSS FEEDS")
     try:
         bandi = scrape_rss_feeds()
         all_bandi.extend(bandi)
@@ -121,8 +121,18 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['RSS'] = 0
     
-    # 3. OPEN DATA
-    print("\n📌 [3/4] OPEN DATA PORTALS")
+    # 3. RSS BUR UFFICIALI (NUOVO!)
+    print("\n📌 [3/5] RSS BUR REGIONALI E PORTALI")
+    try:
+        bandi = scrape_rss_ufficiali()
+        all_bandi.extend(bandi)
+        stats['RSS_BUR'] = len(bandi)
+    except Exception as e:
+        print(f"   ❌ Errore: {e}")
+        stats['RSS_BUR'] = 0
+    
+    # 4. OPEN DATA
+    print("\n📌 [4/5] OPEN DATA PORTALS")
     try:
         bandi = scrape_opendata()
         all_bandi.extend(bandi)
@@ -131,8 +141,8 @@ def run_all_scrapers():
         print(f"   ❌ Errore: {e}")
         stats['OpenData'] = 0
     
-    # 4. KEYWORD SEARCH (NUOVO!)
-    print("\n📌 [4/4] 🔍 KEYWORD SEARCH INTELLIGENTE")
+    # 5. KEYWORD SEARCH
+    print("\n📌 [5/5] 🔍 KEYWORD SEARCH")
     try:
         bandi = cerca_bandi_keyword()
         all_bandi.extend(bandi)
