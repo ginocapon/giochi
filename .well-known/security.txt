@@ -1,0 +1,4 @@
+Contact: https://github.com/ginocapon/giochi/issues
+Preferred-Languages: it, en
+Canonical: https://ginocapon.github.io/giochi/security.txt
+Expires: 2027-03-19T00:00:00.000Z

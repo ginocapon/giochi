@@ -1,0 +1,16 @@
+/* TEAM */
+Progetto: PlayReward
+Ruolo: Sviluppo e design
+Localita': Italia
+
+/* TECNOLOGIA */
+Stack: HTML5 + CSS3 + JavaScript Vanilla
+Framework: Nessuno (codice puro)
+Database: Supabase (PostgreSQL)
+Hosting: GitHub Pages
+Performance: Target PageSpeed 90+
+
+/* STANDARD */
+Accessibilita': WCAG 2.1 AA
+SEO: Schema.org JSON-LD
+Mobile: Mobile-first responsive

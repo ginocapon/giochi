@@ -1,0 +1,39 @@
+# PlayReward — Piattaforma Gaming Rewards
+
+## Cos'e' PlayReward
+PlayReward e' una piattaforma web gratuita di mini-giochi online dove gli utenti giocano e accumulano punti convertibili in premi reali (gift card, cashback, buoni sconto).
+
+## Come funziona
+- Gli utenti giocano gratis a mini-giochi: quiz, trivia, puzzle, memory, speed click
+- Ogni partita completata assegna punti in base al punteggio
+- I punti si convertono in premi reali
+- I premi sono finanziati dai brand sponsor
+
+## Modello di business
+Il modello e' "Play-to-Earn Sponsorizzato":
+- Brand/sponsor pagano per raggiungere gli utenti (impressions, click, install)
+- La piattaforma trattiene il 60-70% dei ricavi
+- L'utente riceve il 30-40% sotto forma di premi/punti
+
+## Tech Stack
+- HTML statico + CSS custom + JavaScript vanilla
+- Zero framework, zero dipendenze esterne
+- Database: Supabase (PostgreSQL)
+- Hosting: GitHub Pages
+
+## Mini-giochi disponibili
+1. Quiz Cultura Generale (50-200 punti)
+2. Trivia Challenge (30-150 punti)
+3. Puzzle Logici (40-180 punti)
+4. Memory Match (20-100 punti)
+5. Speed Click (25-120 punti)
+
+## Premi
+- Gift Card Amazon (da 5.000 punti)
+- Cashback reale (da 3.000 punti)
+- Buoni sconto (da 1.000 punti)
+- Premi esclusivi (da 10.000 punti)
+
+## Contatti
+- Repository: github.com/ginocapon/giochi
+- Lingua: Italiano
