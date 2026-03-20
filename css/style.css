@@ -114,13 +114,8 @@ button { font-family: var(--font); }
 .nav-logo .logo-icon {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: var(--white);
+    object-fit: contain;
 }
 
 .nav-links {
@@ -317,6 +312,7 @@ button { font-family: var(--font); }
     position: relative;
     overflow: hidden;
     z-index: 1;
+    background: url('../img/hero.webp') center right / cover no-repeat;
 }
 
 /* Hero background orbs */
