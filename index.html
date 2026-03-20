@@ -7,6 +7,8 @@
     <meta name="description" content="Gioca gratis a mini-giochi online e guadagna punti convertibili in premi reali. Quiz, trivia, puzzle e molto altro. Inizia subito!">
     <meta name="theme-color" content="#6C63FF">
     <link rel="canonical" href="https://ginocapon.github.io/giochi/">
+    <link rel="alternate" hreflang="it" href="https://ginocapon.github.io/giochi/">
+    <link rel="alternate" hreflang="en" href="https://ginocapon.github.io/giochi/?lang=en">
 
     <!-- Open Graph -->
     <meta property="og:title" content="PlayReward — Gioca e Vinci Premi Veri">
@@ -16,476 +18,8 @@
     <meta property="og:locale" content="it_IT">
     <meta property="og:image" content="https://ginocapon.github.io/giochi/assets/img/og-image.png">
 
-    <!-- Critical CSS inline -->
-    <style>
-        /* Reset & Base — Mobile First */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --primary: #6C63FF;
-            --primary-dark: #5A52D5;
-            --secondary: #FF6B6B;
-            --accent: #4ECDC4;
-            --dark: #1a1a2e;
-            --dark-secondary: #16213e;
-            --surface: #0f3460;
-            --text-light: #e8e8e8;
-            --gold: #FFD93D;
-            --white: #ffffff;
-            --nav-h: 60px;
-            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
-        body {
-            font-family: var(--font);
-            font-size: 16px;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: var(--dark);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Skip Navigation */
-        .skip-nav {
-            position: absolute;
-            top: -100%;
-            left: 0;
-            background: var(--primary);
-            color: var(--white);
-            padding: 8px 16px;
-            z-index: 1000;
-            font-size: 14px;
-            text-decoration: none;
-        }
-        .skip-nav:focus { top: 0; }
-
-        /* Focus Visible */
-        *:focus-visible {
-            outline: 3px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--nav-h);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            z-index: 100;
-            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
-        }
-
-        .nav-logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .nav-logo .coin { color: var(--gold); font-size: 24px; }
-
-        .nav-links {
-            display: none;
-            list-style: none;
-            gap: 24px;
-        }
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--primary); }
-
-        .nav-cta {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-        }
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
-        }
-
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            min-width: 44px;
-            min-height: 44px;
-            align-items: center;
-            justify-content: center;
-        }
-        .hamburger span {
-            width: 24px;
-            height: 2px;
-            background: var(--white);
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: var(--nav-h);
-            left: 0;
-            right: 0;
-            background: var(--dark-secondary);
-            padding: 16px;
-            z-index: 99;
-            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
-        }
-        .mobile-menu.active { display: block; }
-        .mobile-menu a {
-            display: block;
-            padding: 12px 16px;
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 8px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-        }
-        .mobile-menu a:hover { background: rgba(108, 99, 255, 0.1); }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: calc(var(--nav-h) + 32px) 16px 48px;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, var(--surface) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-badge {
-            background: rgba(108, 99, 255, 0.15);
-            color: var(--primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            border: 1px solid rgba(108, 99, 255, 0.3);
-        }
-
-        .hero h1 {
-            font-size: clamp(28px, 6vw, 56px);
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 16px;
-            color: var(--white);
-        }
-        .hero h1 .highlight { color: var(--gold); }
-
-        .hero-sub {
-            font-size: clamp(16px, 3vw, 20px);
-            color: var(--text-light);
-            max-width: 600px;
-            margin-bottom: 32px;
-            opacity: 0.9;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary);
-            color: var(--white);
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            min-height: 48px;
-        }
-        .hero-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.5);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 24px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .hero-stat {
-            text-align: center;
-        }
-        .hero-stat-num {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--gold);
-        }
-        .hero-stat-label {
-            font-size: 13px;
-            color: var(--text-light);
-            opacity: 0.7;
-        }
-
-        /* Sections */
-        .section {
-            padding: 64px 16px;
-        }
-        .section-dark { background: var(--dark-secondary); }
-
-        .section-title {
-            font-size: clamp(24px, 4vw, 36px);
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 8px;
-            color: var(--white);
-        }
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-light);
-            opacity: 0.7;
-            margin-bottom: 48px;
-            font-size: 16px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        /* Games Grid */
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-
-        .game-card {
-            background: var(--dark);
-            border: 1px solid rgba(108, 99, 255, 0.15);
-            border-radius: 16px;
-            padding: 24px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .game-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(108, 99, 255, 0.2);
-            border-color: var(--primary);
-        }
-
-        .game-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-        .game-card h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-        .game-card p {
-            font-size: 14px;
-            color: var(--text-light);
-            opacity: 0.8;
-            margin-bottom: 12px;
-        }
-        .game-points {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(255, 217, 61, 0.15);
-            color: var(--gold);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        /* How it works */
-        .steps {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            counter-reset: step;
-        }
-        .step {
-            text-align: center;
-            padding: 24px;
-        }
-        .step-num {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            color: var(--white);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 16px;
-        }
-        .step h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-        .step p {
-            font-size: 14px;
-            color: var(--text-light);
-            opacity: 0.8;
-        }
-
-        /* Prizes */
-        .prizes-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-        .prize-card {
-            background: var(--dark);
-            border: 1px solid rgba(255, 217, 61, 0.2);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-        }
-        .prize-icon { font-size: 36px; margin-bottom: 8px; }
-        .prize-card h3 {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 4px;
-        }
-        .prize-cost {
-            font-size: 13px;
-            color: var(--gold);
-            font-weight: 600;
-        }
-
-        /* FAQ */
-        .faq-list { max-width: 700px; margin: 0 auto; }
-        .faq-item {
-            border-bottom: 1px solid rgba(108, 99, 255, 0.15);
-            padding: 20px 0;
-        }
-        .faq-q {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--white);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            color: var(--white);
-            font-family: var(--font);
-            min-height: 44px;
-            padding: 0;
-        }
-        .faq-q::after {
-            content: '+';
-            font-size: 20px;
-            color: var(--primary);
-            transition: transform 0.3s;
-            flex-shrink: 0;
-            margin-left: 16px;
-        }
-        .faq-item.active .faq-q::after { transform: rotate(45deg); }
-        .faq-a {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            font-size: 14px;
-            color: var(--text-light);
-            opacity: 0.8;
-            line-height: 1.7;
-        }
-        .faq-item.active .faq-a {
-            max-height: 200px;
-            padding-top: 12px;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--dark);
-            border-top: 1px solid rgba(108, 99, 255, 0.15);
-            padding: 32px 16px;
-            text-align: center;
-        }
-        .footer-links {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.7;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-        }
-        .footer-links a:hover { opacity: 1; color: var(--primary); }
-        .footer-copy {
-            font-size: 13px;
-            color: var(--text-light);
-            opacity: 0.5;
-        }
-
-        /* Desktop */
-        @media (min-width: 768px) {
-            .nav { padding: 0 32px; }
-            .nav-links { display: flex; }
-            .hamburger { display: none; }
-            .section { padding: 80px 32px; }
-            .games-grid { grid-template-columns: repeat(3, 1fr); }
-            .steps { grid-template-columns: repeat(3, 1fr); }
-            .prizes-grid { grid-template-columns: repeat(4, 1fr); }
-            body { font-size: 18px; }
-        }
-
-        @media (min-width: 1024px) {
-            .games-grid { grid-template-columns: repeat(5, 1fr); }
-        }
-    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -495,7 +29,7 @@
         "name": "PlayReward",
         "url": "https://ginocapon.github.io/giochi/",
         "description": "Piattaforma di mini-giochi online con premi reali. Gioca gratis, accumula punti, vinci premi.",
-        "inLanguage": "it"
+        "inLanguage": ["it", "en"]
     }
     </script>
     <script type="application/ld+json">
@@ -524,7 +58,7 @@
                 "name": "Quali premi posso vincere?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Puoi convertire i tuoi punti in gift card Amazon, buoni sconto per e-commerce partner, cashback reale e altri premi digitali."
+                    "text": "Gift card Amazon, buoni sconto, cashback reale, chiavi di gioco Steam e altri premi digitali."
                 }
             },
             {
@@ -532,7 +66,7 @@
                 "name": "Come si accumulano i punti?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Ogni mini-gioco completato ti assegna punti in base al punteggio ottenuto. Puoi guadagnare punti extra con le sfide giornaliere, i quiz sponsorizzati e invitando amici."
+                    "text": "Ogni mini-gioco completato ti assegna punti in base al punteggio ottenuto. Bonus giornalieri con streak, quiz sponsorizzati e programma referral."
                 }
             },
             {
@@ -540,7 +74,7 @@
                 "name": "Posso giocare da mobile?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Si, PlayReward e' progettato mobile-first. Funziona perfettamente su smartphone, tablet e desktop senza bisogno di scaricare app."
+                    "text": "Si, PlayReward e' progettato mobile-first. Funziona su smartphone, tablet e desktop senza bisogno di app."
                 }
             }
         ]
@@ -548,191 +82,412 @@
     </script>
 </head>
 <body>
+    <!-- Cyber Grid Background -->
+    <div class="cyber-grid" aria-hidden="true"></div>
+
     <!-- Skip Navigation -->
-    <a href="#main" class="skip-nav">Vai al contenuto principale</a>
+    <a href="#main" class="skip-nav" data-i18n="skipNav">Vai al contenuto principale</a>
 
     <!-- Navigation -->
     <nav class="nav" role="navigation" aria-label="Navigazione principale">
-        <a href="/" class="nav-logo" aria-label="PlayReward - Homepage">
-            <span class="coin" aria-hidden="true">&#9733;</span>
-            PlayReward
-        </a>
+        <div class="nav-left">
+            <a href="/" class="nav-logo" aria-label="PlayReward - Homepage">
+                <span class="logo-icon" aria-hidden="true">&#9889;</span>
+                PlayReward
+            </a>
+        </div>
         <ul class="nav-links">
-            <li><a href="giochi.html">Giochi</a></li>
-            <li><a href="come-funziona.html">Come Funziona</a></li>
-            <li><a href="premi.html">Premi</a></li>
-            <li><a href="classifica.html">Classifica</a></li>
+            <li><a href="#giochi" data-i18n="navGames">Giochi</a></li>
+            <li><a href="#come-funziona" data-i18n="navHow">Come Funziona</a></li>
+            <li><a href="#premi" data-i18n="navPrizes">Premi</a></li>
+            <li><a href="#tiers" data-i18n="navTiers">Livelli</a></li>
         </ul>
-        <a href="giochi.html" class="nav-cta">Gioca Ora</a>
-        <button class="hamburger" aria-label="Apri menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="nav-right">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="it" aria-label="Italiano">IT</button>
+                <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
+            </div>
+            <div class="nav-points" aria-label="I tuoi punti">
+                <span class="nav-points-icon" aria-hidden="true">&#9733;</span>
+                <span id="navPointsCount">0</span>
+            </div>
+            <a href="#giochi" class="nav-cta" data-i18n="navCta">Gioca Ora</a>
+            <button class="hamburger" aria-label="Apri menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </nav>
 
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu mobile">
-        <a href="giochi.html">Giochi</a>
-        <a href="come-funziona.html">Come Funziona</a>
-        <a href="premi.html">Premi</a>
-        <a href="classifica.html">Classifica</a>
-        <a href="sponsor.html">Per Sponsor</a>
+        <a href="#giochi" data-i18n="navGames">Giochi</a>
+        <a href="#come-funziona" data-i18n="navHow">Come Funziona</a>
+        <a href="#premi" data-i18n="navPrizes">Premi</a>
+        <a href="#tiers" data-i18n="navTiers">Livelli</a>
+        <a href="#referral" data-i18n="navReferral">Invita Amici</a>
+        <a href="sponsor.html" data-i18n="navSponsor">Per Sponsor</a>
     </div>
 
     <!-- Main Content -->
     <main id="main">
+
         <!-- Hero -->
         <section class="hero">
-            <div class="hero-badge">100% Gratuito — Premi Veri</div>
-            <h1>Gioca, Accumula Punti,<br><span class="highlight">Vinci Premi Veri</span></h1>
-            <p class="hero-sub">Mini-giochi gratuiti con premi reali. Quiz, trivia, puzzle e molto altro. Gioca dal browser, senza scaricare nulla.</p>
-            <a href="giochi.html" class="hero-cta">
-                Inizia a Giocare &#9654;
-            </a>
+            <!-- Social Proof Live -->
+            <div class="social-proof reveal">
+                <span class="social-proof-dot" aria-hidden="true"></span>
+                <span data-i18n="socialProof"><span id="socialProofCount">12,450</span>€ distribuiti ai giocatori</span>
+            </div>
+
+            <div class="hero-badge" data-i18n="heroBadge">100% Gratuito &mdash; Premi Veri &mdash; Zero Pubblicita' Invasive</div>
+
+            <h1 data-i18n="heroTitle">Gioca, Accumula Punti,<br><span class="highlight">Vinci Premi Veri</span></h1>
+
+            <p class="hero-sub" data-i18n="heroSub">Mini-giochi 3D gratuiti con premi reali. Quiz, trivia, puzzle e molto altro. Gioca dal browser, senza scaricare nulla.</p>
+
+            <div class="hero-actions">
+                <a href="#giochi" class="btn-primary" data-i18n="heroCta">
+                    Inizia a Giocare &#9654;
+                </a>
+                <a href="#come-funziona" class="btn-secondary" data-i18n="heroCtaSecondary">
+                    Scopri Come Funziona
+                </a>
+            </div>
+
             <div class="hero-stats">
-                <div class="hero-stat">
+                <div class="hero-stat reveal">
                     <div class="hero-stat-num">5+</div>
-                    <div class="hero-stat-label">Mini-Giochi</div>
+                    <div class="hero-stat-label" data-i18n="statGames">Mini-Giochi</div>
                 </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-num" aria-label="gratuito">0€</div>
-                    <div class="hero-stat-label">Sempre Gratis</div>
+                <div class="hero-stat reveal">
+                    <div class="hero-stat-num"><span class="gold">0€</span></div>
+                    <div class="hero-stat-label" data-i18n="statFree">Sempre Gratis</div>
                 </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-num">&#9733;</div>
-                    <div class="hero-stat-label">Premi Veri</div>
+                <div class="hero-stat reveal">
+                    <div class="hero-stat-num">1pt = 0,01€</div>
+                    <div class="hero-stat-label" data-i18n="statTransparency">Valore Trasparente</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Streak -->
+        <section class="streak-section" id="streak">
+            <div class="container">
+                <div class="streak-card reveal">
+                    <div class="streak-header">
+                        <span class="streak-flame" aria-hidden="true">&#128293;</span>
+                        <span class="streak-count" id="streakCount">0</span>
+                    </div>
+                    <p class="streak-label" data-i18n="streakLabel">Giorni consecutivi di gioco</p>
+                    <div class="streak-days" id="streakDays">
+                        <!-- Populated by JS -->
+                    </div>
+                    <p class="streak-bonus" id="streakBonus" data-i18n="streakBonus">Bonus attuale: x1.0</p>
                 </div>
             </div>
         </section>
 
         <!-- Games Section -->
-        <section class="section section-dark" id="giochi">
+        <section class="section" id="giochi">
             <div class="container">
-                <h2 class="section-title">I Nostri Mini-Giochi</h2>
-                <p class="section-subtitle">Scegli il tuo gioco preferito e inizia a guadagnare punti</p>
+                <div class="section-header reveal">
+                    <span class="section-tag" data-i18n="gamesTag">GIOCHI</span>
+                    <h2 class="section-title" data-i18n="gamesTitle">I Nostri <span class="gradient-text">Mini-Giochi</span></h2>
+                    <p class="section-subtitle" data-i18n="gamesSub">Scegli il tuo gioco preferito e inizia a guadagnare punti</p>
+                </div>
                 <div class="games-grid">
-                    <a href="games/quiz/" class="game-card">
-                        <div class="game-icon" aria-hidden="true">&#129504;</div>
-                        <h3>Quiz Cultura</h3>
-                        <p>Metti alla prova le tue conoscenze con domande di cultura generale.</p>
-                        <span class="game-points">&#9733; 50-200 punti</span>
+                    <a href="games/quiz/" class="game-card reveal" data-tilt>
+                        <div class="game-icon-wrap purple" aria-hidden="true">&#129504;</div>
+                        <h3 data-i18n="game1Title">Quiz Cultura</h3>
+                        <p data-i18n="game1Desc">Metti alla prova le tue conoscenze con domande di cultura generale.</p>
+                        <div class="game-meta">
+                            <span class="game-points">&#9733; 50-200 pt</span>
+                            <span class="game-difficulty medium" data-i18n="diffMedium">Media</span>
+                        </div>
+                        <div class="game-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%" data-game="quiz"></div></div>
+                            <div class="progress-label">
+                                <span data-i18n="checkpoint">Checkpoint</span>
+                                <span class="progress-value" data-game="quiz">0/5</span>
+                            </div>
+                        </div>
                     </a>
-                    <a href="games/trivia/" class="game-card">
-                        <div class="game-icon" aria-hidden="true">&#127942;</div>
-                        <h3>Trivia Challenge</h3>
-                        <p>Sfide a tempo su sport, cinema, musica e scienza.</p>
-                        <span class="game-points">&#9733; 30-150 punti</span>
+                    <a href="games/trivia/" class="game-card reveal" data-tilt>
+                        <div class="game-icon-wrap red" aria-hidden="true">&#127942;</div>
+                        <h3 data-i18n="game2Title">Trivia Challenge</h3>
+                        <p data-i18n="game2Desc">Sfide a tempo su sport, cinema, musica e scienza.</p>
+                        <div class="game-meta">
+                            <span class="game-points">&#9733; 30-150 pt</span>
+                            <span class="game-difficulty hard" data-i18n="diffHard">Difficile</span>
+                        </div>
+                        <div class="game-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%" data-game="trivia"></div></div>
+                            <div class="progress-label">
+                                <span data-i18n="checkpoint">Checkpoint</span>
+                                <span class="progress-value" data-game="trivia">0/5</span>
+                            </div>
+                        </div>
                     </a>
-                    <a href="games/puzzle/" class="game-card">
-                        <div class="game-icon" aria-hidden="true">&#129513;</div>
-                        <h3>Puzzle Logici</h3>
-                        <p>Rompicapi e giochi di logica per allenare la mente.</p>
-                        <span class="game-points">&#9733; 40-180 punti</span>
+                    <a href="games/puzzle/" class="game-card reveal" data-tilt>
+                        <div class="game-icon-wrap teal" aria-hidden="true">&#129513;</div>
+                        <h3 data-i18n="game3Title">Puzzle Logici</h3>
+                        <p data-i18n="game3Desc">Rompicapi e giochi di logica per allenare la mente.</p>
+                        <div class="game-meta">
+                            <span class="game-points">&#9733; 40-180 pt</span>
+                            <span class="game-difficulty hard" data-i18n="diffHard">Difficile</span>
+                        </div>
+                        <div class="game-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%" data-game="puzzle"></div></div>
+                            <div class="progress-label">
+                                <span data-i18n="checkpoint">Checkpoint</span>
+                                <span class="progress-value" data-game="puzzle">0/5</span>
+                            </div>
+                        </div>
                     </a>
-                    <a href="games/memory/" class="game-card">
-                        <div class="game-icon" aria-hidden="true">&#128161;</div>
-                        <h3>Memory Match</h3>
-                        <p>Trova le coppie il piu' velocemente possibile.</p>
-                        <span class="game-points">&#9733; 20-100 punti</span>
+                    <a href="games/memory/" class="game-card reveal" data-tilt>
+                        <div class="game-icon-wrap gold" aria-hidden="true">&#128161;</div>
+                        <h3 data-i18n="game4Title">Memory Match</h3>
+                        <p data-i18n="game4Desc">Trova le coppie il piu' velocemente possibile.</p>
+                        <div class="game-meta">
+                            <span class="game-points">&#9733; 20-100 pt</span>
+                            <span class="game-difficulty easy" data-i18n="diffEasy">Facile</span>
+                        </div>
+                        <div class="game-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%" data-game="memory"></div></div>
+                            <div class="progress-label">
+                                <span data-i18n="checkpoint">Checkpoint</span>
+                                <span class="progress-value" data-game="memory">0/5</span>
+                            </div>
+                        </div>
                     </a>
-                    <a href="games/speed-click/" class="game-card">
-                        <div class="game-icon" aria-hidden="true">&#9889;</div>
-                        <h3>Speed Click</h3>
-                        <p>Riflessi fulminei. Clicca i bersagli prima che spariscano.</p>
-                        <span class="game-points">&#9733; 25-120 punti</span>
+                    <a href="games/speed-click/" class="game-card reveal" data-tilt>
+                        <div class="game-icon-wrap blue" aria-hidden="true">&#9889;</div>
+                        <h3 data-i18n="game5Title">Speed Click</h3>
+                        <p data-i18n="game5Desc">Riflessi fulminei. Clicca i bersagli prima che spariscano.</p>
+                        <div class="game-meta">
+                            <span class="game-points">&#9733; 25-120 pt</span>
+                            <span class="game-difficulty easy" data-i18n="diffEasy">Facile</span>
+                        </div>
+                        <div class="game-progress">
+                            <div class="progress-bar"><div class="progress-fill" style="width: 0%" data-game="speed-click"></div></div>
+                            <div class="progress-label">
+                                <span data-i18n="checkpoint">Checkpoint</span>
+                                <span class="progress-value" data-game="speed-click">0/5</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
             </div>
         </section>
 
         <!-- How it Works -->
-        <section class="section" id="come-funziona">
+        <section class="section" id="come-funziona" style="background: var(--dark-secondary);">
             <div class="container">
-                <h2 class="section-title">Come Funziona</h2>
-                <p class="section-subtitle">Tre semplici passi per iniziare a vincere</p>
+                <div class="section-header reveal">
+                    <span class="section-tag" data-i18n="howTag">COME FUNZIONA</span>
+                    <h2 class="section-title" data-i18n="howTitle">Tre Passi per <span class="gradient-text">Vincere</span></h2>
+                    <p class="section-subtitle" data-i18n="howSub">Inizia subito a guadagnare premi reali giocando</p>
+                </div>
                 <div class="steps">
-                    <div class="step">
+                    <div class="step-card reveal">
                         <div class="step-num">1</div>
-                        <h3>Scegli un Gioco</h3>
-                        <p>Esplora il catalogo di mini-giochi: quiz, trivia, puzzle, memory e speed click. Tutti gratuiti e giocabili dal browser.</p>
+                        <h3 data-i18n="step1Title">Scegli un Gioco</h3>
+                        <p data-i18n="step1Desc">Esplora il catalogo di mini-giochi: quiz, trivia, puzzle, memory e speed click. Tutti gratuiti e giocabili dal browser.</p>
                     </div>
-                    <div class="step">
+                    <div class="step-card reveal">
                         <div class="step-num">2</div>
-                        <h3>Accumula Punti</h3>
-                        <p>Ogni partita completata ti assegna punti. Piu' alto il punteggio, piu' punti guadagni. Bonus giornalieri e sfide speciali.</p>
+                        <h3 data-i18n="step2Title">Accumula Punti</h3>
+                        <p data-i18n="step2Desc">Ogni partita completata ti assegna punti. Piu' alto il punteggio, piu' punti guadagni. Bonus streak giornaliero fino a x3.</p>
                     </div>
-                    <div class="step">
+                    <div class="step-card reveal">
                         <div class="step-num">3</div>
-                        <h3>Riscatta i Premi</h3>
-                        <p>Converti i tuoi punti in gift card Amazon, buoni sconto, cashback e altri premi reali. Nessun trucco, nessun costo.</p>
+                        <h3 data-i18n="step3Title">Riscatta i Premi</h3>
+                        <p data-i18n="step3Desc">Converti i tuoi punti in gift card, buoni sconto, cashback e chiavi di gioco. 1 punto = 0,01€ — sempre trasparente.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Prizes Preview -->
-        <section class="section section-dark" id="premi">
+        <!-- Loyalty Tiers -->
+        <section class="section" id="tiers">
             <div class="container">
-                <h2 class="section-title">Premi Disponibili</h2>
-                <p class="section-subtitle">Converti i tuoi punti in premi reali</p>
-                <div class="prizes-grid">
-                    <div class="prize-card">
-                        <div class="prize-icon" aria-hidden="true">&#127873;</div>
-                        <h3>Gift Card Amazon</h3>
-                        <p class="prize-cost">Da 5.000 punti</p>
+                <div class="section-header reveal">
+                    <span class="section-tag" data-i18n="tiersTag">LIVELLI</span>
+                    <h2 class="section-title" data-i18n="tiersTitle">Scala i <span class="gradient-text">Livelli</span></h2>
+                    <p class="section-subtitle" data-i18n="tiersSub">Piu' giochi, piu' guadagni. Ogni livello sblocca bonus esclusivi.</p>
+                </div>
+                <div class="tiers-grid reveal">
+                    <div class="tier-card" data-tier="bronze">
+                        <div class="tier-icon" aria-hidden="true">&#129352;</div>
+                        <div class="tier-name" data-i18n="tierBronze">Bronze</div>
+                        <div class="tier-range">0 — 999 pt</div>
+                        <div class="tier-bonus">x1.0</div>
                     </div>
-                    <div class="prize-card">
-                        <div class="prize-icon" aria-hidden="true">&#128176;</div>
-                        <h3>Cashback Reale</h3>
-                        <p class="prize-cost">Da 3.000 punti</p>
+                    <div class="tier-card" data-tier="silver">
+                        <div class="tier-icon" aria-hidden="true">&#129353;</div>
+                        <div class="tier-name" data-i18n="tierSilver">Silver</div>
+                        <div class="tier-range">1.000 — 4.999 pt</div>
+                        <div class="tier-bonus">x1.2</div>
                     </div>
-                    <div class="prize-card">
-                        <div class="prize-icon" aria-hidden="true">&#127991;</div>
-                        <h3>Buoni Sconto</h3>
-                        <p class="prize-cost">Da 1.000 punti</p>
+                    <div class="tier-card" data-tier="gold">
+                        <div class="tier-icon" aria-hidden="true">&#129351;</div>
+                        <div class="tier-name" data-i18n="tierGold">Gold</div>
+                        <div class="tier-range">5.000 — 14.999 pt</div>
+                        <div class="tier-bonus">x1.5</div>
                     </div>
-                    <div class="prize-card">
-                        <div class="prize-icon" aria-hidden="true">&#127775;</div>
-                        <h3>Premi Esclusivi</h3>
-                        <p class="prize-cost">Da 10.000 punti</p>
+                    <div class="tier-card" data-tier="platinum">
+                        <div class="tier-icon" aria-hidden="true">&#128142;</div>
+                        <div class="tier-name" data-i18n="tierPlatinum">Platinum</div>
+                        <div class="tier-range">15.000 — 39.999 pt</div>
+                        <div class="tier-bonus">x2.0</div>
+                    </div>
+                    <div class="tier-card" data-tier="diamond">
+                        <div class="tier-icon" aria-hidden="true">&#128167;</div>
+                        <div class="tier-name" data-i18n="tierDiamond">Diamond</div>
+                        <div class="tier-range">40.000+ pt</div>
+                        <div class="tier-bonus">x3.0</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prizes / Reward Catalog -->
+        <section class="section" id="premi" style="background: var(--dark-secondary);">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag" data-i18n="rewardsTag">PREMI</span>
+                    <h2 class="section-title" data-i18n="rewardsTitle">Catalogo <span class="gradient-text">Premi</span></h2>
+                    <p class="section-subtitle" data-i18n="rewardsSub">Converti i tuoi punti in premi reali — valore trasparente, sempre</p>
+                </div>
+
+                <!-- Cash Transparency Banner -->
+                <div class="cash-banner reveal">
+                    <div class="cash-rate">1 Punto = <span class="accent">0,01€</span></div>
+                    <p class="cash-note" data-i18n="cashNote">Valore fisso e trasparente. 1.000 punti = 10€ di premi reali.</p>
+                </div>
+
+                <div class="rewards-grid">
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#127873;</div>
+                        <h3 data-i18n="reward1">Gift Card Amazon</h3>
+                        <p class="reward-cost">5.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal1">Valore: 50€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#128176;</div>
+                        <h3 data-i18n="reward2">Cashback PayPal</h3>
+                        <p class="reward-cost">3.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal2">Valore: 30€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#127918;</div>
+                        <h3 data-i18n="reward3">Chiave Steam</h3>
+                        <p class="reward-cost">2.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal3">Valore: 20€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#127991;</div>
+                        <h3 data-i18n="reward4">Buoni Sconto</h3>
+                        <p class="reward-cost">1.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal4">Valore: 10€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#128241;</div>
+                        <h3 data-i18n="reward5">Credito App Store</h3>
+                        <p class="reward-cost">1.500 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal5">Valore: 15€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#127775;</div>
+                        <h3 data-i18n="reward6">Premi Esclusivi</h3>
+                        <p class="reward-cost">10.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal6">Valore: 100€+</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#127911;</div>
+                        <h3 data-i18n="reward7">Gift Card Spotify</h3>
+                        <p class="reward-cost">1.000 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal7">Valore: 10€</p>
+                    </div>
+                    <div class="reward-card reveal">
+                        <div class="reward-icon" aria-hidden="true">&#128187;</div>
+                        <h3 data-i18n="reward8">Gift Card Netflix</h3>
+                        <p class="reward-cost">2.500 pt</p>
+                        <p class="reward-value" data-i18n="rewardVal8">Valore: 25€</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Referral Section (Gated) -->
+        <section class="section referral-section" id="referral">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag" data-i18n="referralTag">INVITA</span>
+                    <h2 class="section-title" data-i18n="referralTitle">Invita Amici, <span class="gradient-text">Guadagna Punti</span></h2>
+                    <p class="section-subtitle" data-i18n="referralSub">Ogni amico che si iscrive ti regala 500 punti bonus</p>
+                </div>
+                <div class="referral-card locked reveal" id="referralCard">
+                    <div class="referral-lock-overlay">
+                        <span class="referral-lock-icon" aria-hidden="true">&#128274;</span>
+                        <span class="referral-lock-text" data-i18n="referralLock">Raggiungi il livello Silver (1.000 pt) per sbloccare</span>
+                    </div>
+                    <div class="referral-content">
+                        <div class="referral-icon" aria-hidden="true">&#127881;</div>
+                        <h3 data-i18n="referralCardTitle">Il Tuo Codice Referral</h3>
+                        <p data-i18n="referralCardDesc">Condividi il tuo codice con gli amici. 500 punti per te + 200 punti per loro!</p>
+                        <div class="referral-code-box">
+                            <span class="referral-code" id="referralCode">------</span>
+                            <button class="referral-copy-btn" id="referralCopyBtn" data-i18n="referralCopy">Copia</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- FAQ -->
-        <section class="section" id="faq">
+        <section class="section" id="faq" style="background: var(--dark-secondary);">
             <div class="container">
-                <h2 class="section-title">Domande Frequenti</h2>
-                <p class="section-subtitle">Tutto quello che devi sapere su PlayReward</p>
+                <div class="section-header reveal">
+                    <span class="section-tag">FAQ</span>
+                    <h2 class="section-title" data-i18n="faqTitle">Domande <span class="gradient-text">Frequenti</span></h2>
+                    <p class="section-subtitle" data-i18n="faqSub">Tutto quello che devi sapere su PlayReward</p>
+                </div>
                 <div class="faq-list">
-                    <div class="faq-item">
-                        <button class="faq-q" aria-expanded="false">Come funziona PlayReward?</button>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq1q">Come funziona PlayReward?</button>
                         <div class="faq-a" role="region">
-                            <p>Giochi a mini-giochi gratuiti (quiz, trivia, puzzle), accumuli punti ad ogni partita completata, e converti i punti in premi reali come gift card, sconti e cashback.</p>
+                            <div class="faq-a-inner" data-i18n="faq1a">Giochi a mini-giochi gratuiti (quiz, trivia, puzzle), accumuli punti ad ogni partita completata, e converti i punti in premi reali come gift card, sconti e cashback.</div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <button class="faq-q" aria-expanded="false">PlayReward e' davvero gratuito?</button>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq2q">PlayReward e' davvero gratuito?</button>
                         <div class="faq-a" role="region">
-                            <p>Si, giocare e' completamente gratuito. I premi sono finanziati dai brand sponsor che pagano per raggiungere i nostri utenti attraverso la piattaforma.</p>
+                            <div class="faq-a-inner" data-i18n="faq2a">Si, giocare e' completamente gratuito. I premi sono finanziati dai brand sponsor che pagano per raggiungere i nostri utenti attraverso la piattaforma.</div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <button class="faq-q" aria-expanded="false">Quali premi posso vincere?</button>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq3q">Quali premi posso vincere?</button>
                         <div class="faq-a" role="region">
-                            <p>Puoi convertire i tuoi punti in gift card Amazon, buoni sconto per e-commerce partner, cashback reale e altri premi digitali.</p>
+                            <div class="faq-a-inner" data-i18n="faq3a">Gift card Amazon, buoni sconto, cashback PayPal, chiavi Steam, credito App Store, abbonamenti Spotify/Netflix e premi esclusivi.</div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <button class="faq-q" aria-expanded="false">Come si accumulano i punti?</button>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq4q">Come si accumulano i punti?</button>
                         <div class="faq-a" role="region">
-                            <p>Ogni mini-gioco completato ti assegna punti in base al punteggio ottenuto. Puoi guadagnare punti extra con le sfide giornaliere, i quiz sponsorizzati e invitando amici.</p>
+                            <div class="faq-a-inner" data-i18n="faq4a">Ogni mini-gioco completato ti assegna punti in base al punteggio. Bonus streak giornaliero (fino a x3), quiz sponsorizzati e programma referral da 500 punti per invito.</div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <button class="faq-q" aria-expanded="false">Posso giocare da mobile?</button>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq5q">Posso giocare da mobile?</button>
                         <div class="faq-a" role="region">
-                            <p>Si, PlayReward e' progettato mobile-first. Funziona perfettamente su smartphone, tablet e desktop senza bisogno di scaricare app.</p>
+                            <div class="faq-a-inner" data-i18n="faq5a">Si, PlayReward e' progettato mobile-first. Funziona perfettamente su smartphone, tablet e desktop senza bisogno di scaricare app.</div>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal">
+                        <button class="faq-q" aria-expanded="false" data-i18n="faq6q">Come funziona la streak giornaliera?</button>
+                        <div class="faq-a" role="region">
+                            <div class="faq-a-inner" data-i18n="faq6a">Giocando ogni giorno accumuli una streak. Il bonus cresce: giorno 3 = x1.2, giorno 7 = x1.5, giorno 14 = x2.0, giorno 30 = x3.0. Se salti un giorno, la streak si resetta.</div>
                         </div>
                     </div>
                 </div>
@@ -742,17 +497,58 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="cookie.html">Cookie Policy</a>
-            <a href="termini.html">Termini di Servizio</a>
-            <a href="sponsor.html">Per Sponsor</a>
-            <a href="come-funziona.html">Come Funziona</a>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>PlayReward</h3>
+                    <p data-i18n="footerDesc">La piattaforma italiana di mini-giochi con premi reali. Gioca gratis, accumula punti, vinci premi. Finanziata da brand sponsor.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 data-i18n="footerPlatform">Piattaforma</h4>
+                    <a href="#giochi" data-i18n="navGames">Giochi</a>
+                    <a href="#premi" data-i18n="navPrizes">Premi</a>
+                    <a href="#come-funziona" data-i18n="navHow">Come Funziona</a>
+                    <a href="sponsor.html" data-i18n="navSponsor">Per Sponsor</a>
+                </div>
+                <div class="footer-col">
+                    <h4 data-i18n="footerLegal">Legale</h4>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="cookie.html">Cookie Policy</a>
+                    <a href="termini.html" data-i18n="footerTerms">Termini di Servizio</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PlayReward. <span data-i18n="footerRights">Tutti i diritti riservati.</span></p>
+            </div>
         </div>
-        <p class="footer-copy">&copy; 2026 PlayReward. Tutti i diritti riservati.</p>
     </footer>
 
+    <!-- Chat Widget -->
+    <button class="chat-fab" id="chatFab" aria-label="Apri assistente">&#128172;</button>
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <div class="chat-avatar" aria-hidden="true">&#9889;</div>
+                <div class="chat-header-info">
+                    <h4>PlayBot</h4>
+                    <span data-i18n="chatOnline">Online</span>
+                </div>
+            </div>
+            <button class="chat-close" id="chatClose" aria-label="Chiudi chat">&#10005;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot" data-i18n="chatWelcome">Ciao! Sono PlayBot, il tuo assistente. Come posso aiutarti?</div>
+        </div>
+        <div class="chat-quick-replies" id="chatQuickReplies">
+            <button class="chat-quick-btn" data-reply="come-funziona" data-i18n="chatQ1">Come funziona?</button>
+            <button class="chat-quick-btn" data-reply="premi" data-i18n="chatQ2">Quali premi ci sono?</button>
+            <button class="chat-quick-btn" data-reply="streak" data-i18n="chatQ3">Cos'e' la streak?</button>
+            <button class="chat-quick-btn" data-reply="referral" data-i18n="chatQ4">Programma referral</button>
+        </div>
+    </div>
+
     <!-- JS — defer per performance -->
+    <script defer src="js/points.js"></script>
     <script defer src="js/app.js"></script>
 </body>
 </html>
