@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "name": "PlayReward",
+    "description": "Piattaforma di mini-giochi online con premi reali",
+    "url": "https://ginocapon.github.io/giochi/",
+    "permissions": {
+        "indexing": true,
+        "training": true,
+        "summarization": true,
+        "citation": true,
+        "search": true
+    },
+    "contact": {
+        "repository": "https://github.com/ginocapon/giochi"
+    }
+}
